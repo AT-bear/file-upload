@@ -1,0 +1,31 @@
+{
+  "name": "file_upload",
+  "version": "1.0.0",
+  "description": "文件上传大文件上传秒传断点续传分片上传",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "file",
+    "upload"
+  ],
+  "author": "at-bear <1509109728@qq.com>",
+  "license": "ISC",
+  "dependencies": {
+    "async-lock": "^1.4.1",
+    "express": "^4.21.2",
+    "fs-extra": "^11.2.0",
+    "multiparty": "^4.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AT-bear/file-upload.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AT-bear/file-upload/issues"
+  },
+  "homepage": "https://github.com/AT-bear/file-upload#readme"
+}
