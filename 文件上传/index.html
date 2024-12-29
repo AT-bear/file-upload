@@ -1,0 +1,81 @@
+<!--
+ * @Author: AT-bear 1509109728@qq.com
+ * @Date: 2024-12-22 14:46:08
+ * @LastEditors: AT-bear 1509109728@qq.com
+ * @LastEditTime: 2024-12-28 23:14:47
+ * @FilePath: \技术要点\index.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置进行设置: https://github.com/OBKoro1/koro1ileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传</title>
+</head>
+<body>
+    <input type="file" id="fileInput" multiple/>
+    <button onclick="startUpload()">开始上传</button>
+</body>
+<script>
+    //设置分片大小
+    const CHUNK_SIZE = 1024 * 1024 * 2; //2MB
+    //分片函数
+    function createChunks(file) {
+        const chunks = [];
+        let cur = 0;
+        while (cur < file.size) {
+            chunks.push(file.slice(cur, cur + CHUNK_SIZE));
+            cur += CHUNK_SIZE;
+        }
+        return chunks;
+    }
+    //异步上传文件
+    async function startUpload() {
+        const fileInput = document.getElementById('fileInput');
+        const uploadFiles = [...fileInput.files];
+        if (uploadFiles.length === 0) {
+            alert('请选择文件');
+            return;
+        }
+
+        const worker = new Worker('js/hash-work.js');
+
+        worker.onmessage = async e => {
+            const { md5 } = e.data;
+            console.log(md5);
+
+            if (md5.length === uploadFiles.length) {
+                try {
+                    const formDataArray = md5.map((md5, index) => {
+                        const formData = new FormData();
+                        formData.append('md5', md5);
+                        formData.append('file', uploadFiles[index]);
+                        return formData;
+                    });
+
+                    const uploadPromises = formDataArray.map(formData => {
+                        return fetch('http://localhost:2121/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                        });
+                    });
+
+                    const responses = await Promise.all(uploadPromises);
+                    console.log(responses);
+                    alert('上传成功');
+                } catch (err) {
+                    console.error(err);
+                    alert('上传失败');
+                } finally {
+                    worker.terminate();
+                }
+            }
+        };
+
+            worker.postMessage({files:uploadFiles});
+       
+
+    }
+</script>
+</html>
