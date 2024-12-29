@@ -1,3 +1,11 @@
+/*
+ * @Author: AT-bear 1509109728@qq.com
+ * @Date: 2024-12-29 16:36:12
+ * @LastEditors: AT-bear 1509109728@qq.com
+ * @LastEditTime: 2024-12-29 16:40:32
+ * @FilePath: \技术要点\文件上传\config\upload.JS
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 const path = require('path');
 const fse = require("fs-extra");
 const crypto = require('crypto');
@@ -5,9 +13,9 @@ const Lock = require('async-lock'); // 引入锁机制
 const fileMd5IndexLock = new Lock();
 // 上传文件函数
 const uploadFiles = (fields, files, fileMd5Index,uploadDir) => {
-    console.log('开始上传文件');
-    console.log(fields);
-    console.log(files);
+    // console.log('开始上传文件');
+    // console.log(fields);
+    // console.log(files);
     
     return new Promise((resolve, reject) => {
       const clientMD5s = fields.md5;
